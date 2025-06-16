@@ -8,5 +8,5 @@ urlpatterns = [
     path('home/',views.Home_view,name='home'),
     path('identify/', views.identifyview, name='identifyuser'),
     # path('resetpassword/<str:en_name>/', views.resetpassword, name='resetpassword'),
-    path('otp/',views.OTP_View,name='otp')
+    path('otp/<str:enc_name>/',views.OTP_View,name='otp_view')
 ]

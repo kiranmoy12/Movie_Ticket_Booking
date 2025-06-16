@@ -9,4 +9,5 @@ class User(AbstractUser):
     is_approved = models.BooleanField(default=False)
     otp = models.IntegerField(null=True,blank=True)
     otp_verify = models.BooleanField(null=True,blank=True)
+    otp_expire = models.DateTimeField(null=True,blank=True)
 

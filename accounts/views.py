@@ -10,6 +10,10 @@ from django.utils.encoding import force_bytes, force_str
 from django.conf import settings
 from .models import User
 import random
+from django.utils import timezone
+
+from .utils import get_otp, enc_uname, dec_uname
+
 
 # Create your views here.
 def Register_view(request):
@@ -124,9 +128,14 @@ def identifyview(request):
             username = form.cleaned_data['username']
             if User.objects.filter(username=username).exists():
                 user = User.objects.get(username=username)
-                otp = str(random.randint(100000, 999999))
-                request.session['otp'] = otp
-                request.session['username'] = username
+                # otp = str(random.randint(100000, 999999))
+                # request.session['otp'] = otp
+                # request.session['username'] = username
+                otp =get_otp()
+                time = timezone.now() + timezone.timedelta(minutes=5)
+                user.otp = otp
+                user.otp_expire = time
+                user.save()
                 send_mail(
                     subject='Your OTP for Password Reset',
                     message=f'Hi {user.first_name},\n\nYour OTP is: {otp}',
@@ -135,14 +144,17 @@ def identifyview(request):
                     fail_silently=False,
                 )
                 messages.success(request,'OTP has been sent to your registered email.')
-                return redirect('otp')
+                enc_name = enc_uname(username)
+                url= f"/accounts/otp/{enc_name}/"
+                return redirect('otp_view', enc_name=enc_name)
             messages.error(request,'user not found')
     context={
         'form': IdentifyUser()
     }
     return render(request,'accounts/identifyuser.html',context)
 
-def OTP_View(request):
+def OTP_View(request,enc_name):
+    username = dec_uname(enc_name)
     if request.method == 'POST':
         entered_otp = request.POST.get('otp')
         # Assume expected OTP stored in session
