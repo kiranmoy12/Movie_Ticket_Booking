@@ -1,0 +1,8 @@
+django-restframework
+pillow
+django-crispy-forms
+crispy-bootstrap4
+python-dotenv
+django-allauth
+django-allauth[socialaccount]
+stripe

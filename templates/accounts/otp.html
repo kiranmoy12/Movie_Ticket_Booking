@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block logo %}
+<div class="auth-left">
+    <img src="{% static 'images/Logo-dark.png' %}" alt="TechTurtle Logo">
+</div>
+{% endblock %}
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-right">
+        <div class="form-container">
+            <form method="POST">
+                {% csrf_token %}
+                <h2 style="text-align: center; color: #004b66;">Enter OTP</h2>
+                {% if messages %}
+                    {% for message in messages %}
+                        <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; text-align: center;">
+                            {{ message }}
+                        </p>
+                    {% endfor %}
+                {% endif %}
+                
+                <label for="otp">OTP</label>
+                <input type="text" name="otp" id="otp" placeholder="Enter OTP" required>
+
+                <input type="submit" value="Verify OTP">
+
+                <div style="text-align: center; margin-top: 10px;">
+                    <a href="{% url 'identifyuser' %}">Back</a> | 
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

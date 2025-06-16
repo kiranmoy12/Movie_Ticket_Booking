@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %} 
+{% load socialaccount %}
+{% block logo %}
+<div class="auth-left">
+    <img src="{% static 'images/Logo-dark.png' %}" alt="TechTurtle Logo">
+</div>
+{% endblock %}
+{% block content %}
+<div class="form-container">
+    <form method="POST">
+        {% csrf_token %}
+        <h2 style="text-align: center; color: #004b66;">Log In</h2>
+
+        <p>{{ form.username.label_tag }} {{ form.username }}</p>
+        <p>{{ form.password.label_tag }} {{ form.password }}</p>
+
+        <div style="text-align: left; margin-top: 10px;">
+            <a href="{% url 'identifyuser' %}">Forgot Password?</a>
+        </div>
+
+        <input type="submit" value="Log In">
+
+        <div style="text-align: center; margin-top: 10px;">
+            Don’t have an account? <a href="{% url 'register' %}">Create New Account</a>
+        </div>
+        <div style="text-align:center; margin-top: 20px;">
+    <a href="{% provider_login_url 'google' %}" class="btn btn-outline-dark w-100">
+        <img src="{% static 'images/google.png' %}" alt="Google Logo" style="height: 20px; vertical-align: middle; margin-right: 8px;">
+        Continue with Google
+    </a>
+</div>
+    </form>
+</div>
+{% endblock %}

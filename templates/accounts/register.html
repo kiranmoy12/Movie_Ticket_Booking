@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %} 
+{% load socialaccount %}
+{% block logo %}
+<div class="auth-left">
+    <img src="{% static 'images/Logo-dark.png' %}" alt="TechTurtle Logo">
+</div>
+{% endblock %}
+{% block content %}
+<div class="form-container">
+    <form method="POST">
+        {% csrf_token %}
+        <h2 style="text-align: center; color: #004b66;">Create New Account</h2>
+        <div class="form-row">
+            <div class="form-group">
+                {{ form.first_name.label_tag }} {{ form.first_name }}
+            </div>
+            <div class="form-group">
+                {{ form.last_name.label_tag }} {{ form.last_name }}
+            </div>
+        </div>
+        <p>{{ form.username.label_tag }} {{ form.username }}</p>
+        <p>{{ form.email.label_tag }} {{ form.email }}</p>
+        <p>{{ form.phone.label_tag }} {{ form.phone }}</p>
+        <p>{{ form.password1.label_tag }} {{ form.password1 }}</p>
+        <p>{{ form.password2.label_tag }} {{ form.password2 }}</p>
+        <input type="submit" value="Register">
+        <div style="text-align: center; margin-top: 10px;">
+            Already have an account? <a href="{% url 'login' %}">Log in</a>
+        </div>
+        <a href="{% provider_login_url 'google' %}" class="btn btn-outline-dark w-100">
+        <img src="{% static 'images/google.png' %}" alt="Google Logo" style="height: 20px; vertical-align: middle; margin-right: 8px;">
+        Continue with Google
+    </a>
+    </form>
+</div>
+{% endblock %}
