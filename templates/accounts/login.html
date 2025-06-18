@@ -1,35 +1,66 @@
 {% extends 'base.html' %}
-{% load static %} 
+{% load static %}
 {% load socialaccount %}
 {% block logo %}
 <div class="auth-left">
     <img src="{% static 'images/Logo-dark.png' %}" alt="TechTurtle Logo">
 </div>
 {% endblock %}
+
 {% block content %}
-<div class="form-container">
-    <form method="POST">
-        {% csrf_token %}
-        <h2 style="text-align: center; color: #004b66;">Log In</h2>
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
 
-        <p>{{ form.username.label_tag }} {{ form.username }}</p>
-        <p>{{ form.password.label_tag }} {{ form.password }}</p>
+<div class="login-container">
+    <!-- Tab Buttons -->
+    <div class="login-tabs">
+        <button class="tab-button active" onclick="showTab('password')">With Password</button>
+        <button class="tab-button" onclick="showTab('otp')">With OTP</button>
+    </div>
 
-        <div style="text-align: left; margin-top: 10px;">
-            <a href="{% url 'identifyuser' %}">Forgot Password?</a>
-        </div>
+    <!-- Password Login Form -->
+    <div class="tab-content">
+        <div id="tab-password" class="tab active">
+            <form method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+                {{ form.username.label_tag }} {{ form.username }}
+                {{ form.password.label_tag }} {{ form.password }}
+                
+                <div style="text-align: right;">
+                    <a href="{% url 'identifyuser' %}" style="font-size: 0.9em; color: #004b66;">Forgot Password?</a>
+                </div>
+                
+                <button type="submit">Login</button>
+            </form>
 
-        <input type="submit" value="Log In">
-
-        <div style="text-align: center; margin-top: 10px;">
-            Don’t have an account? <a href="{% url 'register' %}">Create New Account</a>
-        </div>
-        <div style="text-align:center; margin-top: 20px;">
-    <a href="{% provider_login_url 'google' %}" class="btn btn-outline-dark w-100">
+            <div style="text-align: center; margin-top: 15px;">
+                <p>or</p>
+                 <a href="{% provider_login_url 'google' %}" class="btn btn-outline-dark w-100">
         <img src="{% static 'images/google.png' %}" alt="Google Logo" style="height: 20px; vertical-align: middle; margin-right: 8px;">
         Continue with Google
     </a>
+            </div>
+        </div>
+
+        <!-- OTP Login Form -->
+        <div id="tab-otp" class="tab">
+            <form method="POST" action="{% url 'login_with_otp' %}">
+                {% csrf_token %}
+                <label for="username">Username or Email</label>
+                <input type="text" name="username" placeholder="Enter username/email" required>
+                <button type="submit">Send OTP</button>
+            </form>
+        </div>
+    </div>
 </div>
-    </form>
-</div>
+
+<script>
+    function showTab(tab) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+
+        document.getElementById('tab-' + tab).classList.add('active');
+        const index = tab === 'password' ? 0 : 1;
+        document.querySelectorAll('.tab-button')[index].classList.add('active');
+    }
+</script>
 {% endblock %}
